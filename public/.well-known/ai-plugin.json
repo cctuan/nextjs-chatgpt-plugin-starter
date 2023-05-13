@@ -1,9 +1,9 @@
 {
   "schema_version": "v1",
-  "name_for_human": "TODO Plugin (no auth)",
-  "name_for_model": "todo",
-  "description_for_human": "Plugin for managing a TODO list, you can add, remove and view your TODOs.",
-  "description_for_model": "Plugin for managing a TODO list. Users can add, remove, and list todos.",
+  "name_for_human": "Travel Plugin (no auth)",
+  "name_for_model": "travel-poi",
+  "description_for_human": "Plugin for searching Position of Interest from LINE travel. Users can search latest position or travel information",
+  "description_for_model": "Plugin for searching Position of Interest from LINE travel. Users can search latest position or travel information",
   "auth": {
     "type": "none"
   },

@@ -1,11 +1,28 @@
 openapi: 3.0.1
 info:
-  title: TODO Plugin
-  description: A plugin that allows the user to create and manage a TODO list using ChatGPT.
+  title: Travel Plugin
+  description: A plugin that allows the user to find the Position of Interests while using ChatGPT.
   version: 'v1'
 servers:
-  - url: https://nextjs-chatgpt-plugin-starter.vercel.app
+  - url: nextjs-chatgpt-plugin-starter.vercel.app
 paths:
+  /api/get-poi:
+    post:
+      operationId: getPois
+      summary: Get the list of position of interest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/searchPoiRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getPoiResponse'
   /api/todos:
     get:
       operationId: getTodos
@@ -63,6 +80,15 @@ components:
           type: string
           description: The todo to add to the list.
           required: true
+    searchPoiRequest:
+      type: object
+      required:
+      - keyword
+      properties:
+        keyword:
+          type: string
+          description: The keyword for searching the position of interest.
+          required: true
     getTodosResponse:
       type: object
       properties:
@@ -71,3 +97,41 @@ components:
           items:
             type: string
           description: The list of todos.
+    getPoiResponse:
+      type: object
+      required:
+      - keyword
+      properties:
+        pois:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/poiInfo'
+          description: The list of Position of Interest.
+    poiInfo:
+      type: object
+      properties:
+        poiId:
+          type: string
+          description: Unique Id of LINE travel.
+        name:
+          type: string
+          description: Name of the POI.
+        nameEn:
+          type: string
+          description: English name of the POI.
+        nickname:
+          type: array
+          description: Nicknames of the POI.
+        latitude:
+          type: number
+          description: Latitude of the POI.
+        longitude:
+          type: number
+          description: Longitude of the POI.
+        score:
+          type: number
+          description: Matching score.
+        coverPhoto:
+          type: string
+          description: The image url of cover photo of the POI.

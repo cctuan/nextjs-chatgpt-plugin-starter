@@ -1,10 +1,14 @@
-import { NextResponse } from "next/server";
-import { Todos } from "../../../lib/TodosClass";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET() {
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  console.log('body: ', body)
+  const responseRaw = await fetch(`https://travel.line.me/public/content-api/pois/autoComplete?keyword=${body.keyword}`)
+  const response = await responseRaw.json()
+  console.log(response.data)
   return NextResponse.json(
     {
-      todos: Todos.getTodos(),
+      pois: response.data,
     },
     {
       status: 200,
