@@ -114,6 +114,9 @@ components:
         poiId:
           type: string
           description: Unique Id of LINE travel.
+        poiURL:
+          type: string
+          description: The link to POI detail information.
         name:
           type: string
           description: Name of the POI.
