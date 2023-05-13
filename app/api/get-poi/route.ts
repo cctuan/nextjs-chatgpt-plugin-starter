@@ -5,6 +5,7 @@ export async function POST(req: NextRequest) {
   console.log('body: ', body)
   const responseRaw = await fetch(`https://travel.line.me/public/content-api/pois/autoComplete?keyword=${body.keyword}`)
   const response = await responseRaw.json()
+  console.log(response)
   const pois = response.data.pois.items.map((poi: any) => {
     return {
       poiURL: `https://travel.line.me/poi/${poi.poiId}`,
