@@ -124,7 +124,7 @@ components:
           type: array
           items:
             type: string
-            description: Nickname of the POI.
+          description: The nicknames of the POI.
         latitude:
           type: number
           description: Latitude of the POI.
