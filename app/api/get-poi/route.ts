@@ -9,8 +9,11 @@ export async function POST(req: NextRequest) {
   const pois = response.data.items.map((poi: any) => {
     return {
       poiURL: `https://travel.line.me/poi/${poi.poiId}`,
-      ...poi}
-  })
+      coverPhoto: poi.coverPhoto,
+      name: poi.name,
+      nickname: poi.nickname
+    }
+  }).slice(0, 5)
   return NextResponse.json(
     {
       pois: pois,
