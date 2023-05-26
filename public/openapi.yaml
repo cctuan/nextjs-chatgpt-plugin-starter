@@ -131,19 +131,19 @@ components:
         arriveTime:
           type: string
           format: date-time
-          description: Arrive arriveAirport's time in starting trip.
+          description: Arrive arriveAirport's time in starting trip. ISO 8601 format, please change to human readable.
         departTime:
           type: string
           format: date-time
-          description: Depart departAirport's time in starting trip.
+          description: Depart departAirport's time in starting trip. ISO 8601 format, please change to human readable.
         returnArriveTime:
           type: string
           format: date-time
-          description: Arrive departAirport's time in return trip.
+          description: Arrive departAirport's time in return trip. ISO 8601 format, please change to human readable.
         returnDepartTime:
           type: string
           format: date-time
-          description: Depart arriveAirport's time in return trip.
+          description: Depart arriveAirport's time in return trip. ISO 8601 format, please change to human readable.
         departAirport:
           type: object
           $ref: '#/components/schemas/airportInfo'
@@ -165,12 +165,9 @@ components:
     airportInfo:
       type: object
       properties:
-        code:
-          type: string
-          description: Official codename of the airport.
         name:
           type: string
-          description: Readable name of the airport.
+          description: Name of the airport.
     expInfo:
       type: object
       properties:

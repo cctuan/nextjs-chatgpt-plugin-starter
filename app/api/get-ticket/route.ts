@@ -1,8 +1,10 @@
 import { NextResponse, NextRequest } from "next/server";
 
-export async function POST(req: NextRequest) {
-  const body = await req.json();
-  console.log('body: ', body)
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const fetchTicketInfo = async (body: any) => {
   const ticketSearch = {
     "page":1,
     "pageSize":30,
@@ -27,25 +29,30 @@ export async function POST(req: NextRequest) {
     },
     body: JSON.stringify(ticketSearch)
   })
+
   const response = await responseRaw.json()
-  console.log(response)
   if (!response.data || !response.data.items || response.data.items.length < 1) {
-    return NextResponse.json(
-      {
-        tickets: [],
-      },
-      {
-        status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "https://chat.openai.com",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers":
-            "Content-Type, Authorization, openai-ephemeral-user-id, openai-conversation-id",
-        },
-      }
-    )
+    return []
   }
-  const tickets = response.data.items.map((ticket: any) => {
+  return response.data.items
+}
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  console.log('body: ', body)
+  
+  let counter = 5
+  let result = []
+  while (counter > 0 && result.length === 0) {
+    result = await fetchTicketInfo(body)
+    counter--;
+    if (result.length === 0) {
+      console.log('waitting for ticket information')
+      await delay(500)
+    }
+  }
+
+  const tickets = result.map((ticket: any) => {
     return {
       agentName: ticket.agentName,
       arriveAirport: ticket.arriveAirport,
