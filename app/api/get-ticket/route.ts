@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     counter--;
     if (result.length === 0) {
       console.log('waitting for ticket information')
-      await delay(500)
+      await delay(2000)
     }
   }
 
