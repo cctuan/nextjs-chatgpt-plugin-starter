@@ -2,8 +2,8 @@
   "schema_version": "v1",
   "name_for_human": "Travel Plugin",
   "name_for_model": "travelAssistant",
-  "description_for_human": "Plugin for searching travel information from LINE travel. Users can search POI, travel advices, experience",
-  "description_for_model": "Plugin for searching travel information from LINE travel. Users can search POI, travel advices, experience",
+  "description_for_human": "Plugin for searching travel information from LINE travel. Users can search POI, airplane tickets, experience",
+  "description_for_model": "Plugin for searching travel information from LINE travel. Users can search POI, airplane tickets, experience",
   "auth": {
     "type": "none"
   },

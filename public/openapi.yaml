@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Travel Plugin
-  description: A plugin that allows the user to find the Position of Interests and experiences while using ChatGPT.
+  description: A plugin that allows the user to find the Position of Interests, experiences and airplane ticket while using ChatGPT.
   version: 'v1'
 servers:
   - url: https://nextjs-chatgpt-plugin-starter.vercel.app
@@ -40,8 +40,57 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/getExpResponse'
+  /api/get-ticket:
+    post:
+      operationId: getTicket
+      summary: Get the list of airplane ticket information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/searchTickets'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTicketResponse'
 components:
   schemas:
+    searchTickets:
+      type: object
+      required:
+        - fromCity
+        - toCity
+        - startDate
+        - backDate
+        - numOfAdult
+      properties:
+        fromCity:
+          type: string
+          description: This field specifies the airport name from where the aircraft is scheduled to depart. ex. TPE, SPK, SEL
+          required: true
+        toCity:
+          type: string
+          description: This field denotes the destination or the airport name where the aircraft is scheduled to arrive. ex. TPE, SPK, SEL
+          required: true
+        startDate:
+          type: string
+          format: date
+          description: This field indicates the scheduled time at which the aircraft is set to depart. ex. 2023-06-01
+          required: true
+        backDate:
+          type: string
+          format: date
+          description: This field specifies the scheduled time at which the aircraft is expected to return or arrive back. ex. 2023-06-01, if it's empty, set 7 days after startDate.
+          required: true
+        numOfAdult:
+          type: number
+          description: Total count of adult passengers for the flight.
+          default: 1
+          required: true
     searchPoiRequest:
       type: object
       required:
@@ -60,6 +109,48 @@ components:
           type: string
           description: The keyword for searching the travel experience/activity.
           required: true
+    getTicketResponse:
+      type: array
+      properties:
+        tickets:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/ticketInfo'
+          description: The list of airplane ticket info.
+    ticketInfo:
+      type: object
+      properties:
+        agentName:
+          type: string
+          description: Airplane agent name.
+        arriveAirport:
+          type: object
+          $ref: '#/components/schemas/airportInfo'
+          description: The airport name to destination trip's location.
+        arriveTime:
+          type: string
+          format: date-time
+          description: Arrive arriveAirport's time in starting trip.
+        departTime:
+          type: string
+          format: date-time
+          description: Depart departAirport's time in starting trip.
+        returnArriveTime:
+          type: string
+          format: date-time
+          description: Arrive departAirport's time in return trip.
+        returnDepartTime:
+          type: string
+          format: date-time
+          description: Depart arriveAirport's time in return trip.
+        departAirport:
+          type: object
+          $ref: '#/components/schemas/airportInfo'
+          description: The airport name in starting location.
+        price:
+          type: number
+          description: Price of the ticket
     getExpResponse:
       type: object
       required:
@@ -71,6 +162,15 @@ components:
             type: object
             $ref: '#/components/schemas/expInfo'
           description: The list of experience/activity.
+    airportInfo:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Official codename of the airport.
+        name:
+          type: string
+          description: Readable name of the airport.
     expInfo:
       type: object
       properties:
