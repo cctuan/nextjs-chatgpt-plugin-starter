@@ -3,36 +3,13 @@ import { NextResponse, NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   console.log('body: ', body)
-  const ticketSearch = {
-    "page":1,
-    "pageSize":30,
-    "airlines":[],
-    "roundType":1,
-    "numOfAdult":body.numOfAdult,
-    "numOfChildren":0,
-    "numOfBaby":0,
-    "cabinClass":1,
-    "linePointsRebateOnly":true,
-    "flightSegments":[
-      {"departDate":body.startDate,"fromCity":body.fromCity,"toCity":body.toCity},
-      {"departDate":body.backDate,"fromCity":body.toCity,"toCity": body.fromCity}
-    ]
-  }
-  const responseRaw = await fetch(`https://travel.line.me/content-api/flights/tickets:search`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "origin": "https://travel.line.me",
-      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
-    },
-    body: JSON.stringify(ticketSearch)
-  })
+  const responseRaw = await fetch(`https://travel.line.me/_next/data/df65af0/experiences/list.json?keyword=${body.keyword}`)
   const response = await responseRaw.json()
   console.log(response)
-  if (!response.data || !response.data.items || response.data.items.length < 1) {
+  if (response.pageProps.isError || !(response.pageProps?.serverSideData?.items)) {
     return NextResponse.json(
       {
-        tickets: [],
+        experiences: [],
       },
       {
         status: 200,
@@ -45,21 +22,19 @@ export async function POST(req: NextRequest) {
       }
     )
   }
-  const tickets = response.data.items.map((ticket: any) => {
+  const experiences = response.pageProps.serverSideData.items.map((experience: any) => {
     return {
-      agentName: ticket.agentName,
-      arriveAirport: ticket.arriveAirport,
-      arriveTime: ticket.arriveTime,
-      departTime: ticket.departTime,
-      returnArriveTime: ticket.returnArriveTime,
-      returnDepartTime: ticket.returnDepartTime,
-      departAirport: ticket.departAirport,
-      price: ticket.totalFare,
+      url: `https://travel.line.me/tp?data=${experience.hashedDeeplink}`,
+      price: experience.price,
+      name: experience.name,
+      rating: experience.rating,
+      cities: experience.cities,
+      imageUrl: experience.imageUrl,
     }
   }).slice(0, 8)
   return NextResponse.json(
     {
-      tickets: tickets,
+      experiences: experiences,
     },
     {
       status: 200,

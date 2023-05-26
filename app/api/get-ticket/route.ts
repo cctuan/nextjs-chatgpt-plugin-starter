@@ -3,13 +3,36 @@ import { NextResponse, NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   console.log('body: ', body)
-  const responseRaw = await fetch(`https://travel.line.me/_next/data/df65af0/experiences/list.json?keyword=${body.keyword}`)
+  const ticketSearch = {
+    "page":1,
+    "pageSize":30,
+    "airlines":[],
+    "roundType":1,
+    "numOfAdult":body.numOfAdult,
+    "numOfChildren":0,
+    "numOfBaby":0,
+    "cabinClass":1,
+    "linePointsRebateOnly":true,
+    "flightSegments":[
+      {"departDate":body.startDate,"fromCity":body.fromCity,"toCity":body.toCity},
+      {"departDate":body.backDate,"fromCity":body.toCity,"toCity": body.fromCity}
+    ]
+  }
+  const responseRaw = await fetch(`https://travel.line.me/content-api/flights/tickets:search`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "origin": "https://travel.line.me",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
+    },
+    body: JSON.stringify(ticketSearch)
+  })
   const response = await responseRaw.json()
   console.log(response)
-  if (response.pageProps.isError || !(response.pageProps?.serverSideData?.items)) {
+  if (!response.data || !response.data.items || response.data.items.length < 1) {
     return NextResponse.json(
       {
-        experiences: [],
+        tickets: [],
       },
       {
         status: 200,
@@ -22,19 +45,21 @@ export async function POST(req: NextRequest) {
       }
     )
   }
-  const experiences = response.pageProps.serverSideData.items.map((experience: any) => {
+  const tickets = response.data.items.map((ticket: any) => {
     return {
-      url: `https://travel.line.me/tp?data=${experience.hashedDeeplink}`,
-      price: experience.price,
-      name: experience.name,
-      rating: experience.rating,
-      cities: experience.cities,
-      imageUrl: experience.imageUrl,
+      agentName: ticket.agentName,
+      arriveAirport: ticket.arriveAirport,
+      arriveTime: ticket.arriveTime,
+      departTime: ticket.departTime,
+      returnArriveTime: ticket.returnArriveTime,
+      returnDepartTime: ticket.returnDepartTime,
+      departAirport: ticket.departAirport,
+      price: ticket.totalFare,
     }
   }).slice(0, 8)
   return NextResponse.json(
     {
-      experiences: experiences,
+      tickets: tickets,
     },
     {
       status: 200,
