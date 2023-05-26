@@ -6,34 +6,17 @@ export async function POST(req: NextRequest) {
   const responseRaw = await fetch(`https://travel.line.me/public/content-api/pois/autoComplete?keyword=${body.keyword}`)
   const response = await responseRaw.json()
   console.log(response)
-  if (response.pageProps.isError || response.pageProps?.serverSideData?.items) {
-    return NextResponse.json(
-      {
-        experiences: [],
-      },
-      {
-        status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "https://chat.openai.com",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-          "Access-Control-Allow-Headers":
-            "Content-Type, Authorization, openai-ephemeral-user-id, openai-conversation-id",
-        },
-      }
-    )
-  }
-  const experiences = response.pageProps.serverSideData.items.map((experience: any) => {
+  const pois = response.data.items.map((poi: any) => {
     return {
-      url: `https://travel.line.me/tp?data=${experience.hashedDeeplink}`,
-      price: experience.price,
-      name: experience.name,
-      rating: experience.rating,
-      cities: experience.cities,
+      poiURL: `https://travel.line.me/poi/${poi.poiId}`,
+      coverPhoto: poi.coverPhoto,
+      name: poi.name,
+      nickname: poi.nickname
     }
   }).slice(0, 8)
   return NextResponse.json(
     {
-      experiences: experiences,
+      pois: pois,
     },
     {
       status: 200,
