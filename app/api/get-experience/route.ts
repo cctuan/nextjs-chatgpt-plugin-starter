@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
   const responseRaw = await fetch(`https://travel.line.me/_next/data/df65af0/experiences/list.json?keyword=${body.keyword}`)
   const response = await responseRaw.json()
   console.log(response)
-  if (response.pageProps.isError || response.pageProps?.serverSideData?.items) {
+  if (response.pageProps.isError || !(response.pageProps?.serverSideData?.items)) {
     return NextResponse.json(
       {
         experiences: [],
