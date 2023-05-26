@@ -29,6 +29,7 @@ export async function POST(req: NextRequest) {
       name: experience.name,
       rating: experience.rating,
       cities: experience.cities,
+      imageUrl: experience.imageUrl,
     }
   }).slice(0, 8)
   return NextResponse.json(

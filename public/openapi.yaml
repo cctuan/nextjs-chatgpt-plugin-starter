@@ -86,6 +86,9 @@ components:
         url:
           type: string
           description: Link to the experience/activity.
+        imageUrl:
+          type: string
+          description: Conver image of the experience/activity.
         cities:
           type: array
           items:
