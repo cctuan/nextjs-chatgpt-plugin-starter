@@ -110,7 +110,7 @@ components:
           description: The keyword for searching the travel experience/activity.
           required: true
     getTicketResponse:
-      type: array
+      type: object
       properties:
         tickets:
           type: array
