@@ -1,9 +1,9 @@
 {
   "schema_version": "v1",
-  "name_for_human": "Travel Plugin (no auth)",
-  "name_for_model": "travelPoi",
-  "description_for_human": "Plugin for searching Position of Interest from LINE travel. Users can search latest position or travel information",
-  "description_for_model": "Plugin for searching Position of Interest from LINE travel. Users can search latest position or travel information",
+  "name_for_human": "Travel Plugin",
+  "name_for_model": "travelAssistant",
+  "description_for_human": "Plugin for searching travel information from LINE travel. Users can search POI, travel advices, experience",
+  "description_for_model": "Plugin for searching travel information from LINE travel. Users can search POI, travel advices, experience",
   "auth": {
     "type": "none"
   },
