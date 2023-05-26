@@ -1,10 +1,22 @@
-import { NextResponse } from "next/server";
-import { Todos } from "../../../lib/TodosClass";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function GET() {
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  console.log('body: ', body)
+  const responseRaw = await fetch(`https://travel.line.me/_next/data/df65af0/experiences/list.json?keyword=${body.keyword}`)
+  const response = await responseRaw.json()
+  console.log(response)
+  const pois = response.data.items.map((poi: any) => {
+    return {
+      poiURL: `https://travel.line.me/poi/${poi.poiId}`,
+      coverPhoto: poi.coverPhoto,
+      name: poi.name,
+      nickname: poi.nickname
+    }
+  }).slice(0, 8)
   return NextResponse.json(
     {
-      todos: Todos.getTodos(),
+      pois: pois,
     },
     {
       status: 200,

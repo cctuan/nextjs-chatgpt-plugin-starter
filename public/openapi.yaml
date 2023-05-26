@@ -23,63 +23,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/getPoiResponse'
-  /api/todos:
-    get:
-      operationId: getTodos
-      summary: Get the list of todos
+  /api/get-experience:
+    post:
+      operationId: getExperience
+      summary: Get the list of travel experience or activities
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/searchExpRequest'
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getTodosResponse'
-  /api/create-todo:
-    post:
-      operationId: addTodo
-      summary: add a new todo
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/addTodoRequest'
-      responses:
-        "200":
-          description: OK
-  /api/delete-todo:
-    post:
-      operationId: deleteTodo
-      summary: delete a todo
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/deleteTodoRequest'
-      responses:
-        "200":
-          description: OK
+                $ref: '#/components/schemas/getExpResponse'
 components:
   schemas:
-    deleteTodoRequest:
-      type: object
-      required:
-      - todo
-      properties:
-        todo:
-          type: string
-          description: The todo to delete from the list.
-          required: true
-    addTodoRequest:
-      type: object
-      required:
-      - todo
-      properties:
-        todo:
-          type: string
-          description: The todo to add to the list.
-          required: true
     searchPoiRequest:
       type: object
       required:
@@ -89,14 +51,56 @@ components:
           type: string
           description: The keyword for searching the position of interest.
           required: true
-    getTodosResponse:
+    searchExpRequest:
       type: object
+      required:
+      - keyword
       properties:
-        todos:
+        keyword:
+          type: string
+          description: The keyword for searching the travel experience/activity.
+          required: true
+    getExpResponse:
+      type: object
+      required:
+      - keyword
+      properties:
+        experiences:
           type: array
           items:
-            type: string
-          description: The list of todos.
+            type: object
+            $ref: '#/components/schemas/expInfo'
+          description: The list of experience/activity.
+    expInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of this experience/activity.
+        price:
+          type: number
+          description: price of this experience/activity.
+        rating:
+          type: number
+          description: Rating from 1 to 5.
+        url:
+          type: string
+          description: Link to the experience/activity.
+        cities:
+          type: array
+          items:
+            type: object
+            $ref: '#/components/schemas/cityInfo'
+          description: The city information of the experience/activity.
+    cityInfo:
+      type: object
+      properties:
+        cityName:
+          type: string
+          description: Name of the city.
+        countryName:
+          type: string
+          description: Name of the country.
     getPoiResponse:
       type: object
       required:
