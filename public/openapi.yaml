@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Travel Plugin
-  description: A plugin that allows the user to find the Position of Interests while using ChatGPT.
+  description: A plugin that allows the user to find the Position of Interests and experiences while using ChatGPT.
   version: 'v1'
 servers:
   - url: https://nextjs-chatgpt-plugin-starter.vercel.app
