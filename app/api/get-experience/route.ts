@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   console.log('body: ', body)
-  const responseRaw = await fetch(`https://travel.line.me/_next/data/df65af0/experiences/list.json?keyword=${body.keyword}`)
+  const responseRaw = await fetch(`https://travel.line.me/_next/data/042ca61/experiences/list.json?keyword=${body.keyword}`)
   const response = await responseRaw.json()
   console.log(response)
   if (response.pageProps.isError || !(response.pageProps?.serverSideData?.items)) {
